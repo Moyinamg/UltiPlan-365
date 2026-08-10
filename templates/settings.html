@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Settings | UltiPlan 365</title>
+
+    <!-- Connecting the page to the main CSS file -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Sidebar matching the other pages -->
+        <aside class="sidebar blueprint-sidebar">
+
+            <div class="blueprint-logo">
+
+                <div class="logo-symbol">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div>
+                    <h1>UltiPlan 365</h1>
+                    <p>Your Study Partner</p>
+                </div>
+
+            </div>
+
+            <nav class="nav-links blueprint-nav">
+
+                <a href="{{ url_for('home') }}">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('add_task') }}">
+                    <span class="nav-icon">＋</span>
+                    Add Task
+                </a>
+
+                <a href="{{ url_for('view_tasks') }}">
+                    <span class="nav-icon">☷</span>
+                    View Tasks
+                </a>
+
+                <a href="{{ url_for('study_planner') }}">
+                    <span class="nav-icon">▣</span>
+                    Study Planner
+                </a>
+
+                <a href="{{ url_for('focus_first') }}">
+                    <span class="nav-icon">◎</span>
+                    Focus First
+                </a>
+
+                <a href="{{ url_for('task_manager') }}">
+                    <span class="nav-icon">✓</span>
+                    Task Manager
+                </a>
+
+                <div class="disabled-nav-item">
+
+                    <span class="nav-icon">▥</span>
+
+                    <div>
+                        Analytics
+                        <small>Not available yet</small>
+                    </div>
+
+                </div>
+
+                <!-- Settings is the active page -->
+                <a
+                    href="{{ url_for('settings') }}"
+                    class="active"
+                >
+                    <span class="nav-icon">⚙</span>
+                    Settings
+                </a>
+
+            </nav>
+
+            <div class="study-sidebar-tip">
+
+                <div class="study-tip-icon">
+                    ⚙
+                </div>
+
+                <div>
+                    <h3>Your Preferences</h3>
+
+                    <p>
+                        Choose how you want UltiPlan 365 to look
+                        and support your focus sessions.
+                    </p>
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- Main Settings page -->
+        <main class="settings-main-content">
+
+            <!-- Top heading -->
+            <header class="settings-topbar">
+
+                <div>
+                    <h2>Good morning! 👋</h2>
+                    <p>Choose the settings that work best for you.</p>
+                </div>
+
+                <div class="manager-profile">
+                    👤
+                </div>
+
+            </header>
+
+            <div class="settings-page-content">
+
+                <!-- Page heading -->
+                <div class="settings-page-heading">
+
+                    <div class="settings-heading-icon">
+                        ⚙
+                    </div>
+
+                    <div>
+                        <h1>Settings</h1>
+
+                        <p>
+                            Customize your app appearance and focus preferences.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Settings panel -->
+                <section class="settings-preferences-panel">
+
+                    <!-- Theme setting -->
+                    <div class="settings-preference-row">
+
+                        <div class="settings-preference-icon">
+                            ◐
+                        </div>
+
+                        <div class="settings-preference-information">
+
+                            <h2>Theme</h2>
+
+                            <p>
+                                Choose between the light and dark app themes.
+                            </p>
+
+                        </div>
+
+                        <select
+                            id="theme-setting"
+                            class="settings-select"
+                        >
+                            <option value="light">
+                                Light
+                            </option>
+
+                            <option value="dark">
+                                Dark
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <!-- Text size setting -->
+                    <div class="settings-preference-row">
+
+                        <div class="settings-preference-icon">
+                            Aa
+                        </div>
+
+                        <div class="settings-preference-information">
+
+                            <h2>Text Size</h2>
+
+                            <p>
+                                Make the text slightly larger and easier to read.
+                            </p>
+
+                        </div>
+
+                        <select
+                            id="text-size-setting"
+                            class="settings-select"
+                        >
+                            <option value="normal">
+                                Normal
+                            </option>
+
+                            <option value="large">
+                                Large
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <!-- Focus method setting -->
+                    <div class="settings-preference-row">
+
+                        <div class="settings-preference-icon">
+                            ◎
+                        </div>
+
+                        <div class="settings-preference-information">
+
+                            <h2>Default Focus Method</h2>
+
+                            <p>
+                                Choose the method that should open first
+                                on Focus First.
+                            </p>
+
+                        </div>
+
+                        <select
+                            id="focus-method-setting"
+                            class="settings-select"
+                        >
+                            <option value="25">
+                                Pomodoro, 25 minutes
+                            </option>
+
+                            <option value="45">
+                                Deep Focus, 45 minutes
+                            </option>
+
+                            <option value="60">
+                                Long Session, 60 minutes
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <!-- Break setting -->
+                    <div class="settings-preference-row">
+
+                        <div class="settings-preference-icon">
+                            ◷
+                        </div>
+
+                        <div class="settings-preference-information">
+
+                            <h2>Suggested Breaks</h2>
+
+                            <p>
+                                Prepare a suggested break after a focus session.
+                            </p>
+
+                        </div>
+
+                        <label class="settings-switch">
+
+                            <input
+                                type="checkbox"
+                                id="break-setting"
+                            >
+
+                            <span class="settings-switch-slider"></span>
+
+                        </label>
+
+                    </div>
+
+                    <!-- Reduce motion setting -->
+                    <div class="settings-preference-row">
+
+                        <div class="settings-preference-icon">
+                            ≋
+                        </div>
+
+                        <div class="settings-preference-information">
+
+                            <h2>Reduce Motion</h2>
+
+                            <p>
+                                Reduce movement and animation around the app.
+                            </p>
+
+                        </div>
+
+                        <label class="settings-switch">
+
+                            <input
+                                type="checkbox"
+                                id="motion-setting"
+                            >
+
+                            <span class="settings-switch-slider"></span>
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+                <!-- Bottom settings actions -->
+                <section class="settings-bottom-panel">
+
+                    <div>
+
+                        <h2>Saved Automatically</h2>
+
+                        <p id="settings-status" aria-live="polite">
+                            Changes are saved when you select them.
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        id="reset-settings-button"
+                        class="reset-settings-button"
+                    >
+                        Reset Preferences
+                    </button>
+
+                </section>
+
+            </div>
+
+            <footer class="manager-footer">
+                © 2026 UltiPlan 365. All rights reserved.
+            </footer>
+
+        </main>
+
+    </div>
+
+    <!-- Apply saved settings -->
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+</body>
+
+</html>

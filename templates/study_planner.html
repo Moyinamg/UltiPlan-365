@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Study Planner | UltiPlan 365</title>
+
+    <!-- Connect this page to the main CSS file -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <!-- Hold the sidebar and main page beside each other -->
+    <div class="app-container">
+
+        <!-- Sidebar matching the Add Task and View Tasks pages -->
+        <aside class="sidebar blueprint-sidebar">
+
+            <!-- UltiPlan logo -->
+            <div class="blueprint-logo">
+
+                <!-- Create the four-square logo -->
+                <div class="logo-symbol">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div>
+                    <h1>UltiPlan 365</h1>
+                    <p>Your Study Partner</p>
+                </div>
+
+            </div>
+
+            <!-- Main sidebar navigation -->
+            <nav class="nav-links blueprint-nav">
+
+                <a href="{{ url_for('home') }}">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('add_task') }}">
+                    <span class="nav-icon">＋</span>
+                    Add Task
+                </a>
+
+                <a href="{{ url_for('view_tasks') }}">
+                    <span class="nav-icon">☷</span>
+                    View Tasks
+                </a>
+
+                <a
+                    href="{{ url_for('study_planner') }}"
+                    class="active"
+                >
+                    <span class="nav-icon">▣</span>
+                    Study Planner
+                </a>
+
+                <a href="{{ url_for('focus_first') }}">
+                    <span class="nav-icon">◎</span>
+                    Focus First
+                </a>
+
+                <a href="{{ url_for('task_manager') }}">
+                    <span class="nav-icon">✓</span>
+                    Task Manager
+                </a>
+
+                <!-- These pages are not connected yet -->
+                <div class="disabled-nav-item">
+
+                    <span class="nav-icon">▥</span>
+
+                    <div>
+                        Analytics
+                        <small>Not available yet</small>
+                    </div>
+
+                </div>
+
+                <a href="{{ url_for('settings') }}">
+                    <span class="nav-icon">⚙</span>
+                    Settings
+                </a>
+
+            </nav>
+
+            <!-- Simple study tip at the bottom of the sidebar -->
+            <div class="study-sidebar-tip">
+
+                <div class="study-tip-icon">
+                    ◷
+                </div>
+
+                <div>
+                    <h3>Study Tip</h3>
+
+                    <p>
+                        Break your study time into focused sessions
+                        and take short breaks.
+                    </p>
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- Main page area -->
+        <div class="study-page-area">
+
+            <!-- Top greeting bar -->
+            <header class="study-topbar">
+
+                <div>
+                    <h2>Good morning! 👋</h2>
+                    <p>Plan smart, study better.</p>
+                </div>
+
+                <!-- Decorative icons for now -->
+                <div class="study-header-actions">
+
+                    <button
+                        type="button"
+                        disabled
+                        title="Not available yet"
+                    >
+                        ⌕
+                    </button>
+
+                    <button
+                        type="button"
+                        disabled
+                        title="Not available yet"
+                    >
+                        ♧
+                    </button>
+
+                    <div class="study-profile-circle">
+                        👤
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- Main Study Planner content -->
+            <main class="study-main-content">
+
+                <!-- Page heading -->
+                <div class="study-page-heading">
+
+                    <div class="study-heading-icon">
+                        ▣
+                    </div>
+
+                    <div>
+                        <h1>Study Planner</h1>
+
+                        <p>
+                            Create a simple study plan based on the
+                            time you have available.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Hold the form and generated plan beside each other -->
+                <div class="study-blueprint-layout">
+
+                    <!-- Available study time form -->
+                    <section class="study-input-card">
+
+                        <h2>
+                            How many minutes do you have available?
+                        </h2>
+
+                        <!-- Display an error only when Flask sends one -->
+                        {% if error %}
+
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+
+                        {% endif %}
+
+                        <!-- Send the available time to the Study Planner route -->
+                        <form
+                            method="POST"
+                            action="{{ url_for('study_planner') }}"
+                        >
+
+                            <div class="study-time-input">
+
+                                <input
+                                    type="number"
+                                    id="available-minutes"
+                                    name="available_minutes"
+                                    min="1"
+                                    max="1440"
+                                    placeholder="Example: 120"
+                                    value="{{ available_minutes or '' }}"
+                                    required
+                                >
+
+                                <span>minutes</span>
+
+                            </div>
+
+                            <!-- Give the user a planning reminder -->
+                            <div class="study-tip-box">
+
+                                <div class="study-tip-box-icon">
+                                    ◷
+                                </div>
+
+                                <div>
+                                    <h3>Tip</h3>
+
+                                    <p>
+                                        Be realistic with the time you
+                                        have so you can stick to your plan.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <button
+                                type="submit"
+                                class="study-create-button"
+                            >
+                                ✎ Create Study Plan
+                            </button>
+
+                        </form>
+
+                    </section>
+
+                    <!-- Generated study plan -->
+                    <section class="study-results-card">
+
+                        <div class="study-results-heading">
+
+                            <div class="results-title-icon">
+                                ▣
+                            </div>
+
+                            <div>
+                                <h2>
+                                    Your Study Plan
+
+                                    {% if available_minutes %}
+                                        ({{ available_minutes }} minutes)
+                                    {% endif %}
+                                </h2>
+
+                                <p>
+                                    Here is a focused plan for the time
+                                    you have.
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <!-- Display the plan after the user submits the form -->
+                        {% if study_plan %}
+
+                            <div class="study-results-table">
+
+                                <!-- Table headings -->
+                                <div class="study-results-row results-header">
+                                    <span>#</span>
+                                    <span>Task</span>
+                                    <span>Time</span>
+                                    <span>Focus</span>
+                                </div>
+
+                                <!-- Repeat one row for every study session -->
+                                {% for session in study_plan %}
+
+                                    <div class="study-results-row">
+
+                                        <span class="study-session-number">
+                                            {{ loop.index }}
+                                        </span>
+
+                                        <div class="study-session-task">
+
+                                            <h3>
+                                                {{ session["task_name"] }}
+                                            </h3>
+
+                                            <p>
+                                                {{ session["course"] }}
+                                            </p>
+
+                                            <!-- Show the status for this task -->
+                                            {% if session["status"] == "Continue Tomorrow" %}
+
+                                                <small class="continue-status">
+                                                    Continue Tomorrow
+                                                </small>
+
+                                                <small>
+                                                    {{ session["remaining_minutes"] }}
+                                                    minutes will remain
+                                                </small>
+
+                                            {% else %}
+
+                                                <small class="complete-status">
+                                                    Complete Today
+                                                </small>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                        <span class="study-session-time">
+                                            {{ session["allocated_minutes"] }}
+                                            min
+                                        </span>
+
+                                        <!-- Display a simple focus label -->
+                                        <span
+                                            class="study-focus-label
+                                            {% if loop.index == 1 %}
+                                                high-focus
+                                            {% elif loop.index == 2 %}
+                                                medium-focus
+                                            {% else %}
+                                                next-focus
+                                            {% endif %}
+                                            "
+                                        >
+
+                                            {% if loop.index == 1 %}
+                                                High
+                                            {% elif loop.index == 2 %}
+                                                Medium
+                                            {% else %}
+                                                Next
+                                            {% endif %}
+
+                                        </span>
+
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                            <!-- Show the total amount of planned study time -->
+                            <div class="study-total-card">
+
+                                <div class="study-total-icon">
+                                    ✓
+                                </div>
+
+                                <div>
+                                    <h3>
+                                        Total Study Time:
+                                        {{ used_minutes }} minutes
+                                    </h3>
+
+                                    {% if leftover_minutes > 0 %}
+
+                                        <p>
+                                            You still have
+                                            {{ leftover_minutes }}
+                                            unused minutes.
+                                        </p>
+
+                                    {% else %}
+
+                                        <p>
+                                            Your available study time has
+                                            been fully planned.
+                                        </p>
+
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+                        {% else %}
+
+                            <!-- Show this before a plan has been created -->
+                            <div class="study-empty-plan">
+
+                                <div class="study-empty-icon">
+                                    📚
+                                </div>
+
+                                <h3>Your plan will appear here</h3>
+
+                                <p>
+                                    Enter your available time and select
+                                    Create Study Plan.
+                                </p>
+
+                            </div>
+
+                        {% endif %}
+
+                    </section>
+
+                </div>
+
+                <!-- Note below the generated plan -->
+                <section class="study-note-card">
+
+                    <div class="study-note-icon">
+                        📝
+                    </div>
+
+                    <div>
+                        <h3>Note</h3>
+
+                        <p>
+                            Follow this plan, stay consistent,
+                            and take short breaks when needed.
+                        </p>
+                    </div>
+
+                </section>
+
+            </main>
+
+            <footer class="study-footer">
+                © 2026 UltiPlan 365. All rights reserved.
+            </footer>
+
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+</body>
+
+</html>

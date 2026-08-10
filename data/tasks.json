@@ -1,0 +1,56 @@
+[
+    {
+        "course": "Maths",
+        "task_name": "Maths Problem Set",
+        "deadline": "2026-08-07",
+        "importance": "Low",
+        "difficulty": "Hard",
+        "estimated_minutes": 80,
+        "priority_score": 70
+    },
+    {
+        "course": "Chemistry",
+        "task_name": "Science Report",
+        "deadline": "2026-08-11",
+        "importance": "Medium",
+        "difficulty": "Hard",
+        "estimated_minutes": 150,
+        "priority_score": 70
+    },
+    {
+        "course": "Biology",
+        "task_name": "Biology Quiz",
+        "deadline": "2026-08-05",
+        "importance": "High",
+        "difficulty": "Medium",
+        "estimated_minutes": 90,
+        "priority_score": 50
+    },
+    {
+        "course": "Geology",
+        "task_name": "Geology Test",
+        "deadline": "2026-08-06",
+        "importance": "High",
+        "difficulty": "Medium",
+        "estimated_minutes": 70,
+        "priority_score": 50
+    },
+    {
+        "course": "English",
+        "task_name": "Midterm Exam",
+        "deadline": "2026-08-09",
+        "importance": "High",
+        "difficulty": "Medium",
+        "estimated_minutes": 120,
+        "priority_score": 50
+    },
+    {
+        "course": "Psychology 1010",
+        "task_name": "Psychology Study Guide",
+        "deadline": "2026-08-14",
+        "importance": "Medium",
+        "difficulty": "Easy",
+        "estimated_minutes": 20,
+        "priority_score": 35
+    }
+]

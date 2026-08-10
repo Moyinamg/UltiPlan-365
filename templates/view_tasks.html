@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        >
+        <title>View Tasks | UltiPlan 365</title>
+
+        <!--Connecting this page to the main CSS file-->
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/style.css') }}"
+        >
+    </head>
+    <body>
+        <!--Holding the sidebar and page content beside each other-->
+        <div class="app-container">
+            <!--Sidebar navigation-->
+            <aside class="sidebar blueprint-sidebar">
+                <!--Ultiplan logo-->
+                <div class="blueprint-logo">
+                
+                    <!--Create the four-square logo-->
+                    <div class="logo-symbol">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div>
+                        <h1>UltiPlan 365</h1>
+                        <p>Your Study Partner</p>
+                    </div>
+                </div>
+
+                <!--Main sidebar navigation-->
+                <nav class="nav-links blueprint-nav">
+                    <a href="{{ url_for('home') }}">
+                        <span class="nav-icon">⌂</span>
+                        Dashboard
+                    </a>
+                    <a href="{{ url_for('add_task') }}">
+                        <span class="nav-icon">＋</span>
+                        Add Task
+                    </a>
+                    <a
+                        href="{{ url_for('view_tasks') }}"
+                        class="active"
+                    >
+                        <span class="nav-icon">☷</span>
+                        View Tasks
+                    </a>
+
+                    <a href="{{ url_for('study_planner') }}">
+                        <span class="nav-icon">▣</span>
+                        Study Planner
+                    </a>
+
+                    <a href="{{ url_for('focus_first') }}">
+                        <span class="nav-icon">◎</span>
+                        Focus First
+                    </a>
+
+                    <a href="{{ url_for('task_manager') }}">
+                        <span class="nav-icon">✓</span>
+                        Task Manager
+                    </a>
+
+                    <!--These pages are not connected yet-->
+                    <div class="disabled-nav-item">
+                        <span class="nav-icon">▥</span>
+                        <div>Analytics <small>Not available yet</small></div>
+                    </div>
+
+                    <a href="{{ url_for('settings') }}">
+                        <span class="nav-icon">⚙</span>
+                        Settings
+                    </a>
+                    
+                </nav>
+                <!--Showing the number of currently saved tasks-->
+                <div class="view-sidebar-summary">
+                    <h3>Task Summary</h3>
+                    <div class="sidebar-summary-number">
+                        {{ tasks|length }}
+                    </div>
+                    <p>Saved tasks</p>
+                </div>
+
+                <!--Giving the user a short study reminder-->
+                <div class="view-sidebar-tip">
+                    <h3>Quick Tip</h3>
+                    <p>Start with the task that has the highest priority score.</p>
+                </div>
+            </aside>
+
+            <!--Main View Tasks contet-->
+            <main class="main-content view-tasks-page">
+
+                <!--Simple top greeting-->
+                <header class="view-tasks-topbar">
+                    <div>
+                        <h2>Good morning! 👋</h2>
+                        <p>Stay focused and keep going!</p>
+                    </div>
+                    <!--These icons are only visual for now-->
+                    <div class="view-header-icons">
+                        <button
+                            type="button"
+                            disabled
+                            title="Not available yet"
+                        >⌕</button>
+                        <button
+                            type="button"
+                            disabled
+                            title="Not available yet"
+                        >♧</button>
+
+                        <div class="view-profile-circle">👤</div>
+                    </div>
+                </header>
+
+                <!--Page title and Add Task button-->
+                <div class="view-tasks-heading">
+                    <div class="view-heading-left">
+                        <div class="view-heading-icon">☷</div>
+                        <div>
+                            <h1>View Tasks</h1>
+                            <p>Review and track all of your saved tasks in one place.</p>
+                        </div>
+                    </div>
+
+                    <a
+                        href="{{ url_for('add_task') }}"
+                        class="view-add-task-button"
+                    >
+                        + Add New Task
+                    </a>
+                </div>
+
+                <!--Displaying simple tasks totals-->
+                <section class="view-task-summary-cards">
+                    <div class="view-summary-card">
+                        <p>All Tasks</p>
+                        <h2> {{ tasks|length }}</h2>
+                    </div>
+                    <div class="view-summary-card high-summary">
+                        <p>High Importance</p>
+                        <h2> {{ tasks | selectattr("importance", "equalto", "High") | list | length}}</h2>
+                    </div>
+
+                    <div class="view-summary-card medium-summary">
+                        <p>Medium Importance</p>
+                        <h2> {{ tasks | selectattr("importance", "equalto", "Medium") | list | length}} </h2>
+                    </div>
+                    <div class="view-summary-card low-summary">
+                        <p>Low Importance</p>
+                        <h2> {{ tasks | selectattr("importance", "equalto", "Low") | list | length}} </h2>
+                    </div>
+                </section>
+
+                <!--Holding the task list and slide information beside each other-->
+                <div class="view-tasks-layout">
+                    <!--Main saved-task list-->
+                    <section class="view-task-list-card">
+                        <div class="view-list-header">
+                            <div>
+                                <h2>All Tasks</h2>
+                                <p>Tasks are shown in priority order.</p>
+                            </div>
+                            <!--Search saved tasks by task name or course-->
+                            <div class="view-search-preview">
+                                <input
+                                    type="text"
+                                    id="task-search"
+                                    placeholder="Search tasks by name or course..."
+                                >
+                                <small id="search-message"></small>
+                            </div>
+                        </div>
+                        
+                        <!--Checking whether any tasks exist-->
+                        {% if tasks %}
+                            <!--Repeating one card for every saved task-->
+                            {% for task in tasks %}
+                                <!--Storing searchable task information inside each task row-->
+                                <article 
+                                    class="view-task-row" 
+                                    data-task-name="{{ task['task_name']|lower }}"
+                                    data-course="{{ task['course']|lower }}"
+                                >
+                                    <!--Decorative task icon-->
+                                    <div class="view-task-icon {{ task['importance']|lower }}-icon">▣</div>
+
+                                    <!--Main task information-->
+                                    <div class="view-task-main-info">
+                                        <div class="view-task-title-line">
+                                            <h3>
+                                                {{ task["task_name"] }}
+                                            </h3>
+                                            <span class="importance-badge {{ task['importance']|lower }}-badge"> {{ task["importance"] }}</span>
+                                        </div>
+                                        <p class="view-task-course"> {{ task["course"] }}</p>
+                                        <div class="view-task-meta">
+                                            <span>
+                                                📅 Due:
+                                                {{ task["deadline"] }}
+                                            </span>
+                                            <span>
+                                                ◷
+                                                {{ task["estimated_minutes"] }} minutes
+                                            </span>
+                                            <span>
+                                                Difficulty:
+                                                {{ task["difficulty"] }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!--Showing the calculated priority score-->
+                                    <div class="view-priority-score">
+                                        <div class="score-circle">
+                                            {{ task["priority_score"] }}
+                                        </div>
+                                        <small>Priority Score</small>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        {% else %}
+
+                            <!--Showing this when there are no saved tasks-->
+                            <div class="view-empty-tasks">
+                                <div class="empty-task-icon">☷</div>
+                                <h2>No saved tasks yet</h2>
+                                <p>Add your first task to begin planning.</p>
+                                <a
+                                    href="{{ url_for('add_task') }}"
+                                    class="view-add-task-button"
+                                >+ Add New Task</a>
+                            </div>
+                        {% endif %}
+                    </section>
+
+                    <!--Right-side information-->
+                    <aside class="view-tasks-side-panel">
+                        <!--Simple overview-->
+                        <section class="view-overview-card">
+                            <h2>Tasks Overview</h2>
+                            <div class="overview-line">
+                                <span class="overview-dot high-dot"></span>
+                                <p>High Importance</p>
+                                <strong>
+                                    {{
+                                        tasks
+                                        | selectattr(
+                                            "importance",
+                                            "equalto",
+                                            "High"
+                                        )
+                                        | list
+                                        | length
+                                    }}
+                                </strong>
+                            </div>
+
+                            <div class="overview-line">
+                                <span class="overview-dot medium-dot"></span>
+                                <p>Medium Importance</p>
+                                <strong>
+                                    {{
+                                        tasks
+                                        | selectattr(
+                                            "importance",
+                                            "equalto",
+                                            "Medium"
+                                        )
+                                        | list
+                                        | length
+                                    }}
+                                </strong>
+                            </div>
+
+                            <div class="overview-line">
+                                <span class="overview-dot low-dot"></span>
+                                <p>Low Importance</p>
+                                <strong>
+                                    {{
+                                        tasks
+                                        | selectattr(
+                                            "importance",
+                                            "equalto",
+                                            "Low"
+                                        )
+                                        | list
+                                        | length
+                                    }}
+                                </strong>
+                            </div>
+                        </section>
+
+                        <!-- Explain priority order -->
+                        <section class="view-priority-help-card">
+
+                            <h2>How Tasks Are Ordered</h2>
+
+                            <p>
+                                Your tasks are sorted using priority score,
+                                deadline, importance, and difficulty.
+                            </p>
+
+                        </section>
+
+                        <!--Link to the planner-->
+                        <section class="view-planner-link-card">
+
+                            <h2>Ready to Study?</h2>
+
+                            <p>
+                                Create a plan based on the time you have
+                                available today.
+                            </p>
+
+                            <a href="{{ url_for('study_planner') }}">
+                                Open Study Planner
+                            </a>
+
+                        </section>
+                    </aside>
+                </div>
+
+                <footer class="view-tasks-footer">
+                    © 2026 UltiPlan 365. All rights reserved.
+                </footer>
+            </main>
+        </div>
+
+        <!--Searching the visible tasks without refreshing the page-->
+        <script>
+            //Getting the search box and all task rows
+            const searchInput = document.getElementById("task-search");
+            const taskRows = document.querySelectorAll(".view-task-row");
+            const searchMessage = document.getElementById("search-message");
+
+            // Running this function every time the user types
+            searchInput.addEventListener("input", function () {
+                //converting the search entry to lowercase
+                const searchText = searchInput.value
+                    .trim()
+                    .toLowerCase();
+                let visibleTasks = 0;
+
+                // checking every saved task
+                taskRows.forEach(function (taskRow) {
+                    const taskName = taskRow.dataset.taskName;
+                    const course = taskRow.dataset.course;
+
+                    //showing the task when its name or couse matches
+                    if (
+                        taskName.includes(searchText) ||
+                        course.includes(searchText)
+                    ) {
+                        taskRow.style.display = "grid";
+                        visibleTasks += 1;
+                    } else {
+                        taskRow.style.display = "none";
+                    }
+                });
+                
+                //showing a message when no tasks match the search
+                if (visibleTasks === 0 && searchText !== "") {
+                    searchMessage.textContent = "No matching tasks found.";
+                } else {
+                    searchMessage.textContent = "";
+                }
+            });
+        </script>
+
+        <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+    </body>
+</html>

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Task Manager | UltiPlan 365</title>
+
+    <!-- Connect this page to the main CSS file -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Sidebar matching the other UltiPlan pages -->
+        <aside class="sidebar blueprint-sidebar">
+
+            <div class="blueprint-logo">
+
+                <div class="logo-symbol">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div>
+                    <h1>UltiPlan 365</h1>
+                    <p>Your Study Partner</p>
+                </div>
+
+            </div>
+
+            <nav class="nav-links blueprint-nav">
+
+                <a href="{{ url_for('home') }}">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('add_task') }}">
+                    <span class="nav-icon">＋</span>
+                    Add Task
+                </a>
+
+                <a href="{{ url_for('view_tasks') }}">
+                    <span class="nav-icon">☷</span>
+                    View Tasks
+                </a>
+
+                <a href="{{ url_for('study_planner') }}">
+                    <span class="nav-icon">▣</span>
+                    Study Planner
+                </a>
+
+                <a href="{{ url_for('focus_first') }}">
+                    <span class="nav-icon">◎</span>
+                    Focus First
+                </a>
+
+                <a
+                    href="{{ url_for('task_manager') }}"
+                    class="active"
+                >
+                    <span class="nav-icon">✓</span>
+                    Task Manager
+                </a>
+
+                <div class="disabled-nav-item">
+
+                    <span class="nav-icon">▥</span>
+
+                    <div>
+                        Analytics
+                        <small>Not available yet</small>
+                    </div>
+
+                </div>
+
+                <a href="{{ url_for('settings') }}">
+                    <span class="nav-icon">⚙</span>
+                    Settings
+                </a>
+
+            </nav>
+
+            <!-- Helpful reminder at the bottom -->
+            <div class="study-sidebar-tip">
+
+                <div class="study-tip-icon">
+                    ✓
+                </div>
+
+                <div>
+                    <h3>Task Tip</h3>
+
+                    <p>
+                        Complete one important task before moving
+                        to the next one.
+                    </p>
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- Main Task Manager page -->
+        <main class="manager-main-content">
+
+            <!-- Top greeting -->
+            <header class="manager-topbar">
+
+                <div>
+                    <h2>Good morning! 👋</h2>
+                    <p>Manage your tasks and stay on track.</p>
+                </div>
+
+                <div class="manager-profile">
+                    👤
+                </div>
+
+            </header>
+
+            <div class="manager-page-content">
+
+                <!-- Page heading -->
+                <div class="manager-page-heading">
+
+                    <div class="manager-heading-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <h1>Task Manager</h1>
+
+                        <p>
+                            Complete, delete, and review your saved tasks.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Display Flask messages -->
+                {% with messages = get_flashed_messages() %}
+
+                    {% if messages %}
+
+                        {% for message in messages %}
+
+                            <div class="manager-flash-message">
+                                ✓ {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                {% endwith %}
+
+                <!-- Summary cards -->
+                <section class="manager-summary-grid">
+
+                    <div class="manager-summary-card">
+
+                        <span class="manager-summary-icon">
+                            ☷
+                        </span>
+
+                        <div>
+                            <p>Total Tasks</p>
+                            <h2>{{ total_count }}</h2>
+                        </div>
+
+                    </div>
+
+                    <div class="manager-summary-card">
+
+                        <span class="manager-summary-icon pending-icon">
+                            ◷
+                        </span>
+
+                        <div>
+                            <p>Active Tasks</p>
+                            <h2>{{ active_count }}</h2>
+                        </div>
+
+                    </div>
+
+                    <div class="manager-summary-card">
+
+                        <span class="manager-summary-icon completed-icon">
+                            ✓
+                        </span>
+
+                        <div>
+                            <p>Completed Tasks</p>
+                            <h2>{{ completed_count }}</h2>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- Main page layout -->
+                <div class="manager-page-layout">
+
+                    <div class="manager-task-column">
+
+                        <!-- Active tasks -->
+                        <section class="manager-task-section">
+
+                            <div class="manager-section-heading">
+
+                                <div>
+                                    <h2>Active Tasks</h2>
+
+                                    <p>
+                                        Tasks that still need your attention.
+                                    </p>
+                                </div>
+
+                                <span class="manager-count-badge">
+                                    {{ active_count }}
+                                </span>
+
+                            </div>
+
+                            {% if tasks %}
+
+                                <div class="manager-task-list">
+
+                                    {% for task in tasks %}
+
+                                        <article class="manager-task-row">
+
+                                            <div class="manager-task-number">
+                                                {{ loop.index }}
+                                            </div>
+
+                                            <div class="manager-task-information">
+
+                                                <h3>
+                                                    {{ task["task_name"] }}
+                                                </h3>
+
+                                                <p class="manager-course">
+                                                    {{ task["course"] }}
+                                                </p>
+
+                                                <div class="manager-task-meta">
+
+                                                    <span>
+                                                        📅 {{ task["deadline"] }}
+                                                    </span>
+
+                                                    <span>
+                                                        ◷
+                                                        {{ task["estimated_minutes"] }}
+                                                        minutes
+                                                    </span>
+
+                                                    <span>
+                                                        Score:
+                                                        {{ task["priority_score"] }}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="manager-task-labels">
+
+                                                <span
+                                                    class="manager-importance-label
+                                                    {% if task['importance'] == 'High' %}
+                                                        manager-high-label
+                                                    {% elif task['importance'] == 'Medium' %}
+                                                        manager-medium-label
+                                                    {% else %}
+                                                        manager-low-label
+                                                    {% endif %}
+                                                    "
+                                                >
+                                                    {{ task["importance"] }}
+                                                </span>
+
+                                                <span class="manager-difficulty-label">
+                                                    {{ task["difficulty"] }}
+                                                </span>
+
+                                            </div>
+
+                                            <div class="manager-task-actions">
+
+                                                <!-- Mark this task as completed -->
+                                                <form
+                                                    method="POST"
+                                                    action="{{ url_for(
+                                                        'complete_task',
+                                                        task_index=loop.index0
+                                                    ) }}"
+                                                >
+
+                                                    <button
+                                                        type="submit"
+                                                        class="manager-complete-button"
+                                                    >
+                                                        ✓ Complete
+                                                    </button>
+
+                                                </form>
+
+                                                <!-- Permanently delete this task -->
+                                                <form
+                                                    method="POST"
+                                                    action="{{ url_for(
+                                                        'delete_tasks',
+                                                        task_index=loop.index0
+                                                    ) }}"
+                                                >
+
+                                                    <button
+                                                        type="submit"
+                                                        class="manager-delete-button"
+                                                        onclick="return confirm('Are you sure you want to delete this task?')"
+                                                    >
+                                                        Delete
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </article>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% else %}
+
+                                <!-- Display when there are no active tasks -->
+                                <div class="manager-empty-state">
+
+                                    <div class="manager-empty-icon">
+                                        🎉
+                                    </div>
+
+                                    <h3>No active tasks</h3>
+
+                                    <p>
+                                        You have completed everything or have
+                                        not added any tasks yet.
+                                    </p>
+
+                                    <a href="{{ url_for('add_task') }}">
+                                        Add a New Task
+                                    </a>
+
+                                </div>
+
+                            {% endif %}
+
+                        </section>
+
+                        <!-- Completed tasks -->
+                        <section class="manager-task-section completed-task-section">
+
+                            <div class="manager-section-heading">
+
+                                <div>
+                                    <h2>Completed Tasks</h2>
+
+                                    <p>
+                                        Tasks you have already finished.
+                                    </p>
+                                </div>
+
+                                <span class="manager-count-badge completed-count-badge">
+                                    {{ completed_count }}
+                                </span>
+
+                            </div>
+
+                            {% if completed_tasks %}
+
+                                <div class="manager-task-list">
+
+                                    {% for task in completed_tasks %}
+
+                                        <article class="manager-task-row completed-manager-row">
+
+                                            <div class="manager-task-number completed-number">
+                                                ✓
+                                            </div>
+
+                                            <div class="manager-task-information">
+
+                                                <h3>
+                                                    {{ task["task_name"] }}
+                                                </h3>
+
+                                                <p class="manager-course">
+                                                    {{ task["course"] }}
+                                                </p>
+
+                                                <div class="manager-task-meta">
+
+                                                    <span>
+                                                        {{ task["estimated_minutes"] }}
+                                                        minutes
+                                                    </span>
+
+                                                    <span class="manager-completed-text">
+                                                        Completed
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="manager-completed-status">
+                                                ✓ Completed
+                                            </div>
+
+                                            <div class="manager-task-actions">
+
+                                                <!--Moving the completed task back to the active list-->
+                                                <form
+                                                    method="POST"
+                                                    action="{{ url_for(
+                                                        'restore_completed_task',
+                                                        task_index=loop.index0
+                                                    ) }}"
+                                                >
+
+                                                    <button
+                                                        type="submit"
+                                                        class="manager-restore-button"
+                                                    >
+                                                        ↩ Move Back
+                                                    </button>
+
+                                                </form>
+
+                                                <!--Permanently remove the completed task-->
+                                                <form
+                                                    method="POST"
+                                                    action="{{ url_for(
+                                                        'delete_completed_task',
+                                                        task_index=loop.index0
+                                                    ) }}"
+                                                >
+                                                    <button
+                                                        type="submit"
+                                                        class="manager-delete-button"
+                                                        onclick="return confirm('Remove this completed task from your history?')"
+                                                    >
+                                                        Remove
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </article>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="manager-empty-completed">
+
+                                    <p>
+                                        Completed tasks will appear here.
+                                    </p>
+
+                                </div>
+
+                            {% endif %}
+
+                        </section>
+
+                    </div>
+
+                    <!-- Simple right-side cards -->
+                    <aside class="manager-side-column">
+
+                        <section class="manager-progress-card">
+
+                            <h2>✓ Your Progress</h2>
+
+                            {% if total_count > 0 %}
+
+                                {% set progress =
+                                    (completed_count / total_count * 100)|round|int
+                                %}
+
+                            {% else %}
+
+                                {% set progress = 0 %}
+
+                            {% endif %}
+
+                            <div class="manager-progress-number">
+                                {{ progress }}%
+                            </div>
+
+                            <div class="manager-progress-track">
+
+                                <div class="manager-progress-fill" style="--progress-width: {{ progress }}%;"></div>
+
+                            </div>
+
+                            <p>
+                                You have completed
+                                {{ completed_count }}
+                                out of
+                                {{ total_count }}
+                                tasks.
+                            </p>
+
+                        </section>
+
+                        <section class="manager-tip-card">
+
+                            <h2>💡 Simple Tips</h2>
+
+                            <p>✓ Focus on one task at a time.</p>
+
+                            <p>✓ Begin with the highest-priority task.</p>
+
+                            <p>✓ Take short breaks when needed.</p>
+
+                            <p>✓ Review your tasks each day.</p>
+
+                        </section>
+
+                        <section class="manager-action-card">
+
+                            <h2>Quick Action</h2>
+
+                            <p>
+                                Have something new to complete?
+                            </p>
+
+                            <a href="{{ url_for('add_task') }}">
+                                ＋ Add New Task
+                            </a>
+
+                        </section>
+
+                    </aside>
+
+                </div>
+
+            </div>
+
+            <footer class="manager-footer">
+                © 2026 UltiPlan 365. All rights reserved.
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+</body>
+
+</html>

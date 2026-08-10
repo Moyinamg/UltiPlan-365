@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add Task | UltiPlan 365</title>
+
+    <!-- Connect this page to the main CSS file -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Sidebar matching the other UltiPlan pages -->
+        <aside class="sidebar blueprint-sidebar">
+
+            <div class="blueprint-logo">
+
+                <div class="logo-symbol">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div>
+                    <h1>UltiPlan 365</h1>
+                    <p>Your Study Partner</p>
+                </div>
+
+            </div>
+
+            <nav class="nav-links blueprint-nav">
+
+                <a href="{{ url_for('home') }}">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+
+                <a
+                    href="{{ url_for('add_task') }}"
+                    class="active"
+                >
+                    <span class="nav-icon">＋</span>
+                    Add Task
+                </a>
+
+                <a href="{{ url_for('view_tasks') }}">
+                    <span class="nav-icon">☷</span>
+                    View Tasks
+                </a>
+
+                <a href="{{ url_for('study_planner') }}">
+                    <span class="nav-icon">▣</span>
+                    Study Planner
+                </a>
+
+                <a href="{{ url_for('focus_first') }}">
+                    <span class="nav-icon">◎</span>
+                    Focus First
+                </a>
+
+                <a href="{{ url_for('task_manager') }}">
+                    <span class="nav-icon">✓</span>
+                    Task Manager
+                </a>
+
+                <div class="disabled-nav-item">
+
+                    <span class="nav-icon">▥</span>
+
+                    <div>
+                        Analytics
+                        <small>Not available yet</small>
+                    </div>
+
+                </div>
+
+                <!-- Settings is now a working page -->
+                <a href="{{ url_for('settings') }}">
+                    <span class="nav-icon">⚙</span>
+                    Settings
+                </a>
+
+            </nav>
+
+            <!-- Real daily progress -->
+            <div class="daily-progress-card">
+
+                <h3>Daily Progress</h3>
+
+                <div
+                    class="real-progress-circle"
+                    id="daily-progress-circle"
+                    data-progress="{{ daily_progress }}"
+                >
+
+                    <div class="real-progress-inner">
+                        {{ daily_progress }}%
+                    </div>
+
+                </div>
+
+                {% if daily_progress == 100 %}
+
+                    <p>Great job! All your tasks are completed.</p>
+
+                {% elif daily_progress > 0 %}
+
+                    <p>Keep going. You are making progress.</p>
+
+                {% else %}
+
+                    <p>Complete a task to begin your progress.</p>
+
+                {% endif %}
+
+            </div>
+
+            <!-- Useful help card -->
+            <div class="sidebar-help-card">
+
+                <div class="help-icon">
+                    ?
+                </div>
+
+                <div>
+                    <h4>Need Help?</h4>
+
+                    <p>
+                        Use a clear task name, a realistic time,
+                        and the correct deadline.
+                    </p>
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- Main Add Task page -->
+        <div class="blueprint-page-area">
+
+            <!-- Top greeting -->
+            <header class="blueprint-topbar">
+
+                <div>
+                    <h2>Good morning! 👋</h2>
+                    <p>Let’s plan something amazing.</p>
+                </div>
+
+                <div class="topbar-actions">
+
+                    <button
+                        type="button"
+                        class="header-icon-button"
+                        disabled
+                        title="Search is not available yet"
+                    >
+                        ⌕
+                    </button>
+
+                    <!-- Notification number has been removed -->
+                    <button
+                        type="button"
+                        class="header-icon-button notification-button"
+                        disabled
+                        title="Notifications are not available yet"
+                    >
+                        ♧
+                    </button>
+
+                    <div class="profile-preview">
+                        👤
+                    </div>
+
+                </div>
+
+            </header>
+
+            <main class="blueprint-main-content">
+
+                <!-- Page heading -->
+                <div class="blueprint-page-heading">
+
+                    <div class="heading-left">
+
+                        <div class="heading-icon">
+                            ▣
+                        </div>
+
+                        <div>
+                            <h1>Add New Task</h1>
+
+                            <p>
+                                Enter the details of your task to stay
+                                organized and on track.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <a
+                        href="{{ url_for('home') }}"
+                        class="blueprint-back-button"
+                    >
+                        ← Back to Dashboard
+                    </a>
+
+                </div>
+
+                <div class="blueprint-add-task-layout">
+
+                    <!-- Main task form -->
+                    <section class="blueprint-task-form-card">
+
+                        {% if error %}
+
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+
+                        {% endif %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('add_task') }}"
+                        >
+
+                            <!-- Task name -->
+                            <div class="blueprint-form-group">
+
+                                <label for="task-name">
+                                    Task Name
+                                    <span>*</span>
+                                </label>
+
+                                <div class="input-with-counter">
+
+                                    <input
+                                        type="text"
+                                        id="task-name"
+                                        name="task_name"
+                                        placeholder="E.g., Complete Python assignment"
+                                        maxlength="120"
+                                        required
+                                    >
+
+                                    <small id="task-name-counter">
+                                        0/120
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Course -->
+                            <div class="blueprint-form-group">
+
+                                <label for="course">
+                                    Course / Subject
+                                    <span>*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="course"
+                                    name="course"
+                                    placeholder="E.g., Computer Science"
+                                    required
+                                >
+
+                            </div>
+
+                            <!-- Deadline and estimated time -->
+                            <div class="blueprint-form-row">
+
+                                <div class="blueprint-form-group">
+
+                                    <label for="deadline">
+                                        Deadline
+                                        <span>*</span>
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        id="deadline"
+                                        name="deadline"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="blueprint-form-group">
+
+                                    <label for="estimated-minutes">
+                                        Estimated Time (minutes)
+                                        <span>*</span>
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="estimated-minutes"
+                                        name="estimated_minutes"
+                                        min="1"
+                                        placeholder="E.g., 60"
+                                        required
+                                    >
+
+                                </div>
+
+                            </div>
+
+                            <!-- Importance and difficulty -->
+                            <div class="blueprint-form-row">
+
+                                <div class="blueprint-form-group">
+
+                                    <label for="importance">
+                                        Importance
+                                        <span>*</span>
+                                    </label>
+
+                                    <select
+                                        id="importance"
+                                        name="importance"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Select importance
+                                        </option>
+
+                                        <option value="High">
+                                            High
+                                        </option>
+
+                                        <option value="Medium">
+                                            Medium
+                                        </option>
+
+                                        <option value="Low">
+                                            Low
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="blueprint-form-group">
+
+                                    <label for="difficulty">
+                                        Difficulty
+                                        <span>*</span>
+                                    </label>
+
+                                    <select
+                                        id="difficulty"
+                                        name="difficulty"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Select difficulty
+                                        </option>
+
+                                        <option value="Easy">
+                                            Easy
+                                        </option>
+
+                                        <option value="Medium">
+                                            Medium
+                                        </option>
+
+                                        <option value="Hard">
+                                            Hard
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Future category field -->
+                            <div class="blueprint-form-group unavailable-field">
+
+                                <div class="label-with-status">
+
+                                    <label for="category">
+                                        Category
+                                        <small>(Optional)</small>
+                                    </label>
+
+                                    <span class="unavailable-label">
+                                        Not available yet
+                                    </span>
+
+                                </div>
+
+                                <select
+                                    id="category"
+                                    name="category"
+                                    disabled
+                                >
+                                    <option>
+                                        Assignment, Exam, or Project
+                                    </option>
+                                </select>
+
+                            </div>
+
+                            <!-- Future notes field -->
+                            <div class="blueprint-form-group unavailable-field">
+
+                                <div class="label-with-status">
+
+                                    <label for="notes">
+                                        Notes
+                                        <small>(Optional)</small>
+                                    </label>
+
+                                    <span class="unavailable-label">
+                                        Not available yet
+                                    </span>
+
+                                </div>
+
+                                <div class="notes-preview">
+
+                                    <textarea
+                                        id="notes"
+                                        name="notes"
+                                        placeholder="Add any extra notes about this task..."
+                                        maxlength="300"
+                                        disabled
+                                    ></textarea>
+
+                                    <small>0/300</small>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Future reminder field -->
+                            <div class="reminder-preview unavailable-field">
+
+                                <div class="reminder-option">
+
+                                    <input
+                                        type="checkbox"
+                                        id="reminder"
+                                        disabled
+                                    >
+
+                                    <label for="reminder">
+                                        Remind me before the deadline
+                                    </label>
+
+                                </div>
+
+                                <div class="reminder-time">
+
+                                    <span>♧</span>
+
+                                    <select disabled>
+                                        <option>24 hours before</option>
+                                    </select>
+
+                                </div>
+
+                                <span class="unavailable-label">
+                                    Not available yet
+                                </span>
+
+                            </div>
+
+                            <!-- Working save buttons -->
+                            <div class="blueprint-form-actions">
+
+                                <button
+                                    type="submit"
+                                    name="save_action"
+                                    value="save"
+                                    class="blueprint-save-button"
+                                >
+                                    ＋ Save Task
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    name="save_action"
+                                    value="save_another"
+                                    class="save-another-button"
+                                >
+                                    ↻ Save & Add Another
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </section>
+
+                    <!-- Right-side cards -->
+                    <aside class="blueprint-side-panel">
+
+                        <!-- Planning tips with no X button -->
+                        <section class="better-planning-card">
+
+                            <div class="side-card-heading">
+
+                                <h2>★ Tips for Better Planning</h2>
+
+                            </div>
+
+                            <div class="blueprint-tip">
+                                <span>✓</span>
+                                Be specific with your task name
+                            </div>
+
+                            <div class="blueprint-tip">
+                                <span>✓</span>
+                                Estimate your time realistically
+                            </div>
+
+                            <div class="blueprint-tip">
+                                <span>✓</span>
+                                Set importance based on the deadline
+                            </div>
+
+                            <div class="blueprint-tip">
+                                <span>✓</span>
+                                Break large tasks into smaller ones
+                            </div>
+
+                        </section>
+
+                        <!-- Real priority preview -->
+                        <section class="task-priority-card">
+
+                            <div class="priority-card-heading">
+
+                                <h2>▥ Task Priority Preview</h2>
+
+                                <span class="live-preview-label">
+                                    Live preview
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="real-priority-circle"
+                                id="priority-preview-circle"
+                            >
+
+                                <div class="real-priority-inner">
+
+                                    <strong id="priority-preview-number">
+                                        0
+                                    </strong>
+
+                                    <small id="priority-preview-label">
+                                        Enter task details
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            <p id="priority-preview-message">
+                                Select a deadline, importance, and difficulty
+                                to see the estimated priority score.
+                            </p>
+
+                            <div class="priority-explanation">
+
+                                <h3>How is it calculated?</h3>
+
+                                <p>
+                                    The score uses the deadline, importance,
+                                    and difficulty you select.
+                                </p>
+
+                            </div>
+
+                        </section>
+
+                        <!-- Future quick actions -->
+                        <section class="quick-actions-card">
+
+                            <h2>⚡ Future Additions</h2>
+
+                            <div class="unavailable-action">
+                                <span>Duplicate last task</span>
+                                <small>Future improvement</small>
+                            </div>
+
+                            <div class="unavailable-action">
+                                <span>Import tasks</span>
+                                <small>Future improvement</small>
+                            </div>
+
+                        </section>
+
+                    </aside>
+
+                </div>
+
+            </main>
+
+            <footer class="blueprint-footer">
+                © 2026 UltiPlan 365. All rights reserved.
+            </footer>
+
+        </div>
+
+    </div>
+
+    <!-- Connect the page to the main JavaScript file -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+</body>
+
+</html>

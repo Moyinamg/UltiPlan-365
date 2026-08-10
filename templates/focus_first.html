@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Focus First | UltiPlan 365</title>
+
+    <!-- Connect the page to the main CSS file -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Sidebar matching the other UltiPlan pages -->
+        <aside class="sidebar blueprint-sidebar">
+
+            <div class="blueprint-logo">
+
+                <div class="logo-symbol">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div>
+                    <h1>UltiPlan 365</h1>
+                    <p>Your Study Partner</p>
+                </div>
+
+            </div>
+
+            <nav class="nav-links blueprint-nav">
+
+                <a href="{{ url_for('home') }}">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('add_task') }}">
+                    <span class="nav-icon">＋</span>
+                    Add Task
+                </a>
+
+                <a href="{{ url_for('view_tasks') }}">
+                    <span class="nav-icon">☷</span>
+                    View Tasks
+                </a>
+
+                <a href="{{ url_for('study_planner') }}">
+                    <span class="nav-icon">▣</span>
+                    Study Planner
+                </a>
+
+                <a
+                    href="{{ url_for('focus_first') }}"
+                    class="active"
+                >
+                    <span class="nav-icon">◎</span>
+                    Focus First
+                </a>
+
+                <a href="{{ url_for('task_manager') }}">
+                    <span class="nav-icon">✓</span>
+                    Task Manager
+                </a>
+
+                <div class="disabled-nav-item">
+
+                    <span class="nav-icon">▥</span>
+
+                    <div>
+                        Analytics
+                        <small>Not available yet</small>
+                    </div>
+
+                </div>
+
+                <a href="{{ url_for('settings') }}">
+                    <span class="nav-icon">⚙</span>
+                    Settings
+                </a>
+
+            </nav>
+
+            <div class="study-sidebar-tip">
+
+                <div class="study-tip-icon">
+                    ◎
+                </div>
+
+                <div>
+                    <h3>Focus Tip</h3>
+
+                    <p>
+                        Put your phone away and focus on one task
+                        at a time.
+                    </p>
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- Main Focus First page -->
+        <main class="focus-main-content">
+
+            <header class="focus-topbar">
+
+                <div>
+                    <h2>Good morning! 👋</h2>
+                    <p>Let’s focus on what matters most today.</p>
+                </div>
+
+                <div class="focus-profile">
+                    👤
+                </div>
+
+            </header>
+
+            <div class="focus-page-content">
+
+                <div class="focus-page-heading">
+
+                    <div class="focus-heading-icon">
+                        ◎
+                    </div>
+
+                    <div>
+                        <h1>Focus First</h1>
+
+                        <p>
+                            Work on your highest-priority task with fewer
+                            distractions.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="focus-page-layout">
+
+                    <!-- Main task and timer column -->
+                    <div class="focus-primary-column">
+
+                        <!-- Recommended task -->
+                        <section class="focus-task-card">
+
+                            <div class="focus-task-card-top">
+
+                                <h2>★ Your Top Priority Task</h2>
+
+                                <div class="focus-task-top-right">
+
+                                    <span id="focus-task-position">
+                                        {% if tasks %}
+                                            Task 1 of {{ tasks|length }}
+                                        {% else %}
+                                            No tasks
+                                        {% endif %}
+                                    </span>
+
+                                    <span
+                                        class="focus-priority-score"
+                                        id="focus-priority-score"
+                                    >
+                                        {% if focus_task %}
+                                            Priority Score:
+                                            {{ focus_task["priority_score"] }}
+                                        {% endif %}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Task information -->
+                            <div
+                                id="focus-task-content"
+                                {% if not focus_task %}
+                                    class="hidden-focus-section"
+                                {% endif %}
+                            >
+
+                                <div class="focus-task-details">
+
+                                    <div class="focus-task-icon">
+                                        📖
+                                    </div>
+
+                                    <div class="focus-task-information">
+
+                                        <h2 id="focus-task-name">
+                                            {% if focus_task %}
+                                                {{ focus_task["task_name"] }}
+                                            {% endif %}
+                                        </h2>
+
+                                        <p
+                                            class="focus-course-name"
+                                            id="focus-task-course"
+                                        >
+                                            {% if focus_task %}
+                                                {{ focus_task["course"] }}
+                                            {% endif %}
+                                        </p>
+
+                                        <div class="focus-task-information-grid">
+
+                                            <div class="focus-detail-item">
+
+                                                <span>📅</span>
+
+                                                <div>
+                                                    <h3>Due Date</h3>
+
+                                                    <p id="focus-task-deadline">
+                                                        {% if focus_task %}
+                                                            {{ focus_task["deadline"] }}
+                                                        {% endif %}
+                                                    </p>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="focus-detail-item">
+
+                                                <span>◷</span>
+
+                                                <div>
+                                                    <h3>Estimated Time</h3>
+
+                                                    <p id="focus-task-estimated-time">
+                                                        {% if focus_task %}
+                                                            {{ focus_task["estimated_minutes"] }}
+                                                            minutes
+                                                        {% endif %}
+                                                    </p>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="focus-detail-item">
+
+                                                <span>◎</span>
+
+                                                <div>
+                                                    <h3>Importance</h3>
+
+                                                    <span
+                                                        class="focus-detail-label importance-label"
+                                                        id="focus-task-importance"
+                                                    >
+                                                        {% if focus_task %}
+                                                            {{ focus_task["importance"] }}
+                                                        {% endif %}
+                                                    </span>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="focus-detail-item">
+
+                                                <span>▥</span>
+
+                                                <div>
+                                                    <h3>Difficulty</h3>
+
+                                                    <span
+                                                        class="focus-detail-label difficulty-label"
+                                                        id="focus-task-difficulty"
+                                                    >
+                                                        {% if focus_task %}
+                                                            {{ focus_task["difficulty"] }}
+                                                        {% endif %}
+                                                    </span>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="focus-reason-box">
+
+                                    <span class="focus-reason-icon">
+                                        💡
+                                    </span>
+
+                                    <div>
+                                        <h3>Why focus on this first?</h3>
+
+                                        <p>
+                                            This task currently has the highest
+                                            priority score in your task list.
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Displayed when there are no tasks -->
+                            <div
+                                class="focus-empty-task"
+                                id="focus-empty-task"
+                                {% if focus_task %}
+                                    hidden
+                                {% endif %}
+                            >
+
+                                <div>📚</div>
+
+                                <h2>No task is ready yet</h2>
+
+                                <p>
+                                    Add a task before using the Focus First page.
+                                </p>
+
+                                <a href="{{ url_for('add_task') }}">
+                                    Add a Task
+                                </a>
+
+                            </div>
+
+                        </section>
+
+                        <!-- Focus timer -->
+                        <section
+                            class="focus-timer-card"
+                            id="focus-timer-card"
+                        >
+
+                            <div class="focus-timer-heading">
+
+                                <div>
+                                    <h2>◷ Focus Timer</h2>
+
+                                    <p>
+                                        Choose the focus method that fits your
+                                        task and study style.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <!-- Focus method choices -->
+                            <div class="focus-methods">
+
+                                <button
+                                    type="button"
+                                    class="focus-method-button active-method"
+                                    data-minutes="25"
+                                    data-break="5"
+                                >
+                                    <strong>Pomodoro</strong>
+                                    <small>25 min focus</small>
+                                    <small>5 min break</small>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="focus-method-button"
+                                    data-minutes="45"
+                                    data-break="10"
+                                >
+                                    <strong>Deep Focus</strong>
+                                    <small>45 min focus</small>
+                                    <small>10 min break</small>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="focus-method-button"
+                                    data-minutes="60"
+                                    data-break="15"
+                                >
+                                    <strong>Long Session</strong>
+                                    <small>60 min focus</small>
+                                    <small>15 min break</small>
+                                </button>
+
+                            </div>
+
+                            <!-- Optional break setting -->
+                            <label class="focus-break-option">
+
+                                <input
+                                    type="checkbox"
+                                    id="use-breaks-checkbox"
+                                    checked
+                                >
+
+                                <span>
+                                    Use suggested breaks between focus sessions
+                                </span>
+
+                            </label>
+
+                            <!-- Large timer -->
+                            <div class="focus-timer-area">
+
+                                <div
+                                    class="focus-timer-circle"
+                                    id="focus-timer-circle"
+                                >
+
+                                    <div class="focus-timer-circle-inner">
+
+                                        <div
+                                            id="focus-timer-display"
+                                            class="focus-timer-display"
+                                        >
+                                            25:00
+                                        </div>
+
+                                        <p id="focus-timer-mode">
+                                            Focus Time
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Task progress -->
+                            <div class="focus-task-progress">
+
+                                <div class="focus-progress-text">
+
+                                    <span>Task Progress</span>
+
+                                    <strong id="focus-task-progress-text">
+                                        0 of
+                                        {% if focus_task %}
+                                            {{ focus_task["estimated_minutes"] }}
+                                        {% else %}
+                                            0
+                                        {% endif %}
+                                        minutes
+                                    </strong>
+
+                                </div>
+
+                                <div class="focus-progress-track">
+
+                                    <div
+                                        class="focus-progress-fill"
+                                        id="focus-progress-fill"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Timer controls -->
+                            <div class="focus-timer-controls">
+
+                                <button
+                                    type="button"
+                                    id="start-focus-button"
+                                    class="start-focus-button"
+                                >
+                                    ▶ Start Focus
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="reset-focus-button"
+                                    class="secondary-focus-button"
+                                >
+                                    ↻ Reset
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="skip-task-button"
+                                    class="secondary-focus-button skip-task-button"
+                                >
+                                    Skip Task →
+                                </button>
+
+                            </div>
+
+                            <p
+                                class="focus-timer-message"
+                                id="focus-timer-message"
+                                aria-live="polite"
+                            >
+                                Select a method and begin when you are ready.
+                            </p>
+
+                        </section>
+
+                    </div>
+
+                    <!-- Helpful cards -->
+                    <aside class="focus-side-column">
+
+                        <section class="stay-focused-card">
+
+                            <h2>✓ Stay Focused</h2>
+
+                            <div class="focus-reminder">
+                                <span>●</span>
+                                Find a quiet place
+                            </div>
+
+                            <div class="focus-reminder">
+                                <span>●</span>
+                                Turn off distractions
+                            </div>
+
+                            <div class="focus-reminder">
+                                <span>●</span>
+                                Put your phone away
+                            </div>
+
+                            <div class="focus-reminder">
+                                <span>●</span>
+                                Take deep breaths
+                            </div>
+
+                            <div class="focus-reminder">
+                                <span>●</span>
+                                Focus on one task
+                            </div>
+
+                        </section>
+
+                        <section class="focus-method-guide-card">
+
+                            <h2>Focus Methods</h2>
+
+                            <div class="method-guide-item">
+
+                                <h3>Pomodoro</h3>
+
+                                <p>
+                                    Helpful for beginning a task and avoiding
+                                    feeling overwhelmed.
+                                </p>
+
+                            </div>
+
+                            <div class="method-guide-item">
+
+                                <h3>Deep Focus</h3>
+
+                                <p>
+                                    Helpful for reading, studying, and assignments
+                                    that need more concentration.
+                                </p>
+
+                            </div>
+
+                            <div class="method-guide-item">
+
+                                <h3>Long Session</h3>
+
+                                <p>
+                                    Helpful for essays, major projects, exam
+                                    preparation, and longer tasks.
+                                </p>
+
+                            </div>
+
+                        </section>
+
+                        <section class="focus-quick-actions-card">
+
+                            <h2>⚡ Quick Actions</h2>
+
+                            <a href="{{ url_for('view_tasks') }}">
+                                <span>View All Tasks</span>
+                                <span>→</span>
+                            </a>
+
+                            <a href="{{ url_for('study_planner') }}">
+                                <span>Study Planner</span>
+                                <span>→</span>
+                            </a>
+
+                            <a href="{{ url_for('add_task') }}">
+                                <span>Add New Task</span>
+                                <span>→</span>
+                            </a>
+
+                        </section>
+
+                        <section class="focus-quote-card">
+
+                            <p>
+                                “The secret of getting ahead is getting started.”
+                            </p>
+
+                            <span>– Mark Twain</span>
+
+                        </section>
+
+                    </aside>
+
+                </div>
+
+            </div>
+
+            <footer class="focus-footer">
+                © 2026 UltiPlan 365. All rights reserved.
+            </footer>
+
+        </main>
+
+    </div>
+
+    <!-- Completion popup -->
+    <div
+        class="focus-popup-overlay"
+        id="focus-complete-popup"
+        hidden
+    >
+
+        <div class="focus-popup-card">
+
+            <div class="focus-popup-icon">
+                ✓
+            </div>
+
+            <h2>You completed your planned task time!</h2>
+
+            <p id="focus-popup-message">
+                You have finished the estimated time for this task.
+            </p>
+
+            <div class="focus-popup-buttons">
+
+                <button
+                    type="button"
+                    id="continue-working-button"
+                    class="continue-working-button"
+                >
+                    Continue Working
+                </button>
+
+                <button
+                    type="button"
+                    id="next-task-button"
+                    class="next-task-button"
+                >
+                    Move to Next Task
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Giving JavaScript access to the saved tasks -->
+    <script
+        id="focus-task-data"
+        type="application/json"
+    >
+        {{ tasks|tojson }}
+    </script>
+
+    <!-- Connecting the page to the JavaScript file -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard | UltiPlan 365</title>
+
+    <!-- Connect the dashboard to the main CSS file -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Sidebar matching all other UltiPlan pages -->
+        <aside class="sidebar blueprint-sidebar">
+
+            <div class="blueprint-logo">
+
+                <div class="logo-symbol">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div>
+                    <h1>UltiPlan 365</h1>
+                    <p>Your Study Partner</p>
+                </div>
+
+            </div>
+
+            <nav class="nav-links blueprint-nav">
+
+                <a
+                    href="{{ url_for('home') }}"
+                    class="active"
+                >
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('add_task') }}">
+                    <span class="nav-icon">＋</span>
+                    Add Task
+                </a>
+
+                <a href="{{ url_for('view_tasks') }}">
+                    <span class="nav-icon">☷</span>
+                    View Tasks
+                </a>
+
+                <a href="{{ url_for('study_planner') }}">
+                    <span class="nav-icon">▣</span>
+                    Study Planner
+                </a>
+
+                <a href="{{ url_for('focus_first') }}">
+                    <span class="nav-icon">◎</span>
+                    Focus First
+                </a>
+
+                <a href="{{ url_for('task_manager') }}">
+                    <span class="nav-icon">✓</span>
+                    Task Manager
+                </a>
+
+                <div class="disabled-nav-item">
+
+                    <span class="nav-icon">▥</span>
+
+                    <div>
+                        Analytics
+                        <small>Not available yet</small>
+                    </div>
+
+                </div>
+
+                <a href="{{ url_for('settings') }}">
+                    <span class="nav-icon">⚙</span>
+                    Settings
+                </a>
+
+            </nav>
+
+            <!-- Simple daily goal card -->
+            <div class="study-sidebar-tip">
+
+                <div class="study-tip-icon">
+                    ★
+                </div>
+
+                <div>
+                    <h3>Daily Goal</h3>
+
+                    <p>
+                        Choose one important task and make progress
+                        on it today.
+                    </p>
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- Main Dashboard page -->
+        <main class="dashboard-main-content">
+
+            <!-- Top greeting -->
+            <header class="dashboard-topbar">
+
+                <div>
+                    <h2>Good morning! 👋</h2>
+                    <p>Here is an overview of your current study plan.</p>
+                </div>
+
+                <a
+                    href="{{ url_for('add_task') }}"
+                    class="dashboard-top-add-button"
+                >
+                    ＋ Add Task
+                </a>
+
+            </header>
+
+            <div class="dashboard-page-content">
+
+                <!-- Page heading -->
+                <div class="dashboard-page-heading">
+
+                    <div class="dashboard-heading-icon">
+                        ⌂
+                    </div>
+
+                    <div>
+                        <h1>Dashboard</h1>
+
+                        <p>
+                            Review your tasks, priorities, and current workload.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Flask messages -->
+                {% with messages = get_flashed_messages() %}
+
+                    {% if messages %}
+
+                        {% for message in messages %}
+
+                            <div class="dashboard-flash-message">
+                                ✓ {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                {% endwith %}
+
+                <!-- Main task summary -->
+                <section class="dashboard-summary-grid">
+
+                    <div class="dashboard-summary-card">
+
+                        <div class="dashboard-summary-icon">
+                            ☷
+                        </div>
+
+                        <div>
+                            <p>Total Tasks</p>
+                            <h2>{{ total_count }}</h2>
+                        </div>
+
+                    </div>
+
+                    <div class="dashboard-summary-card">
+
+                        <div class="dashboard-summary-icon active-summary-icon">
+                            ◷
+                        </div>
+
+                        <div>
+                            <p>Active Tasks</p>
+                            <h2>{{ active_count }}</h2>
+                        </div>
+
+                    </div>
+
+                    <div class="dashboard-summary-card">
+
+                        <div class="dashboard-summary-icon complete-summary-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <p>Completed</p>
+                            <h2>{{ completed_count }}</h2>
+                        </div>
+
+                    </div>
+
+                    <div class="dashboard-summary-card">
+
+                        <div class="dashboard-summary-icon high-summary-icon">
+                            !
+                        </div>
+
+                        <div>
+                            <p>High Priority</p>
+                            <h2>{{ high_priority_count }}</h2>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- Main Dashboard layout -->
+                <div class="dashboard-main-grid">
+
+                    <!-- Left column -->
+                    <div class="dashboard-left-column">
+
+                        <!-- Current active tasks -->
+                        <section class="dashboard-task-card">
+
+                            <div class="dashboard-card-heading">
+
+                                <div>
+                                    <h2>Current Tasks</h2>
+
+                                    <p>
+                                        Your first tasks based on priority.
+                                    </p>
+                                </div>
+
+                                <a href="{{ url_for('view_tasks') }}">
+                                    View All →
+                                </a>
+
+                            </div>
+
+                            {% if tasks %}
+
+                                <div class="dashboard-task-list">
+
+                                    {% for task in tasks %}
+
+                                        <article class="dashboard-task-row">
+
+                                            <div class="dashboard-task-number">
+                                                {{ loop.index }}
+                                            </div>
+
+                                            <div class="dashboard-task-information">
+
+                                                <h3>
+                                                    {{ task["task_name"] }}
+                                                </h3>
+
+                                                <p>
+                                                    {{ task["course"] }}
+                                                </p>
+
+                                                <div class="dashboard-task-meta">
+
+                                                    <span>
+                                                        📅 {{ task["deadline"] }}
+                                                    </span>
+
+                                                    <span>
+                                                        ◷
+                                                        {{ task["estimated_minutes"] }}
+                                                        minutes
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="dashboard-task-priority">
+
+                                                <span
+                                                    class="
+                                                        dashboard-priority-label
+
+                                                        {% if task['importance'] == 'High' %}
+                                                            dashboard-high-priority
+                                                        {% elif task['importance'] == 'Medium' %}
+                                                            dashboard-medium-priority
+                                                        {% else %}
+                                                            dashboard-low-priority
+                                                        {% endif %}
+                                                    "
+                                                >
+                                                    {{ task["importance"] }}
+                                                </span>
+
+                                                <small>
+                                                    Score:
+                                                    {{ task["priority_score"] }}
+                                                </small>
+
+                                            </div>
+
+                                        </article>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="dashboard-empty-tasks">
+
+                                    <div>📚</div>
+
+                                    <h3>No active tasks yet</h3>
+
+                                    <p>
+                                        Add your first task to begin organizing
+                                        your study plan.
+                                    </p>
+
+                                    <a href="{{ url_for('add_task') }}">
+                                        Add Your First Task
+                                    </a>
+
+                                </div>
+
+                            {% endif %}
+
+                        </section>
+
+                        <!-- Simple navigation cards -->
+                        <section class="dashboard-quick-section">
+
+                            <div class="dashboard-card-heading">
+
+                                <div>
+                                    <h2>Continue Planning</h2>
+
+                                    <p>
+                                        Choose what you would like to work on next.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="dashboard-quick-grid">
+
+                                <a
+                                    href="{{ url_for('study_planner') }}"
+                                    class="dashboard-quick-card"
+                                >
+
+                                    <span>▣</span>
+
+                                    <div>
+                                        <h3>Build a Study Plan</h3>
+                                        <p>Plan your available study time.</p>
+                                    </div>
+
+                                </a>
+
+                                <a
+                                    href="{{ url_for('focus_first') }}"
+                                    class="dashboard-quick-card"
+                                >
+
+                                    <span>◎</span>
+
+                                    <div>
+                                        <h3>Start a Focus Session</h3>
+                                        <p>Work on your top-priority task.</p>
+                                    </div>
+
+                                </a>
+
+                                <a
+                                    href="{{ url_for('task_manager') }}"
+                                    class="dashboard-quick-card"
+                                >
+
+                                    <span>✓</span>
+
+                                    <div>
+                                        <h3>Manage Your Tasks</h3>
+                                        <p>Complete, restore, or delete tasks.</p>
+                                    </div>
+
+                                </a>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+                    <!-- Right column -->
+                    <aside class="dashboard-right-column">
+
+                        <!-- Focus First recommendation -->
+                        <section class="dashboard-focus-card">
+
+                            <div class="dashboard-focus-title">
+
+                                <span>◎</span>
+
+                                <div>
+                                    <h2>Focus First</h2>
+                                    <p>Your recommended starting point.</p>
+                                </div>
+
+                            </div>
+
+                            {% if focus_task %}
+
+                                <div class="dashboard-focus-task">
+
+                                    <span class="dashboard-focus-badge">
+                                        Priority Score:
+                                        {{ focus_task["priority_score"] }}
+                                    </span>
+
+                                    <h3>
+                                        {{ focus_task["task_name"] }}
+                                    </h3>
+
+                                    <p>
+                                        {{ focus_task["course"] }}
+                                    </p>
+
+                                    <div class="dashboard-focus-details">
+
+                                        <span>
+                                            {{ focus_task["estimated_minutes"] }}
+                                            minutes
+                                        </span>
+
+                                        <span>
+                                            {{ focus_task["difficulty"] }}
+                                        </span>
+
+                                    </div>
+
+                                    <a href="{{ url_for('focus_first') }}">
+                                        Start Focusing →
+                                    </a>
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="dashboard-small-empty">
+
+                                    <p>
+                                        Add a task to receive a Focus First
+                                        recommendation.
+                                    </p>
+
+                                </div>
+
+                            {% endif %}
+
+                        </section>
+
+                        <!-- Replaces the calendar from the blueprint -->
+                        <section class="dashboard-workload-card">
+
+                            <div class="dashboard-workload-title">
+
+                                <span>▥</span>
+
+                                <div>
+                                    <h2>Workload Snapshot</h2>
+
+                                    <p>
+                                        A simple overview of your remaining work.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="dashboard-workload-stat">
+
+                                <span>Active study time</span>
+
+                                <strong>
+                                    {{ total_estimated_minutes }} minutes
+                                </strong>
+
+                            </div>
+
+                            <div class="dashboard-workload-stat">
+
+                                <span>Average priority score</span>
+
+                                <strong>
+                                    {{ average_priority_score }}
+                                </strong>
+
+                            </div>
+
+                            <div class="dashboard-next-deadline">
+
+                                <h3>Next Deadline</h3>
+
+                                {% if next_deadline_task %}
+
+                                    <strong>
+                                        {{ next_deadline_task["task_name"] }}
+                                    </strong>
+
+                                    <p>
+                                        {{ next_deadline_task["deadline"] }}
+                                    </p>
+
+                                {% else %}
+
+                                    <p>No upcoming task deadline.</p>
+
+                                {% endif %}
+
+                            </div>
+
+                        </section>
+
+                        <!-- Encouraging message -->
+                        <section class="dashboard-message-card">
+
+                            <span>💡</span>
+
+                            <div>
+                                <h3>Keep It Manageable</h3>
+
+                                <p>
+                                    You do not have to finish everything at once.
+                                    Start with one clear next step.
+                                </p>
+                            </div>
+
+                        </section>
+
+                    </aside>
+
+                </div>
+
+            </div>
+
+            <footer class="dashboard-footer">
+                © 2026 UltiPlan 365. All rights reserved.
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+</body>
+
+</html>
