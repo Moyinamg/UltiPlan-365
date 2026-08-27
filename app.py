@@ -26,6 +26,12 @@ serializer = URLSafeTimedSerializer(app.secret_key)
 ULTIPLAN_EMAIL = os.environ.get("ULTIPLAN_EMAIL")
 ULTIPLAN_EMAIL_PASSWORD = os.environ.get("ULTIPLAN_EMAIL_PASSWORD")
 
+#Public address used for links sent in emails
+ULTIPLAN_BASE_URL = os.environ.get(
+    "ULTIPLAN_BASE_URL",
+    "http://127.0.0.1:5000"
+).rstrip("/")
+
 #Datatbase configuration
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///ultiplan.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -159,7 +165,7 @@ def forgot_password():
             )
 
             reset_link = (
-                "https://legendary-giggle-697w96jp4jqf47g5-5000.app.github.dev"
+                ULTIPLAN_BASE_URL
                 + url_for("reset_password", token=token)
             )
 
@@ -170,13 +176,11 @@ def forgot_password():
                 )
             except Exception as error:
                 pass
-                
-        #Always showing the same message whether the email exists or not
-        flash(
-            "If an account exists with that email, a reset link will be sent."
-        )
         
-        return redirect(url_for("login"))
+        #Only showing this page after the form was submitted
+        return render_template("reset_email_sent.html")
+    #When user click "Forgot Password",
+    #they should still see the email form
     return render_template("forgot_password.html")
 
 @app.route("/reset-password/<token>", methods=["GET", "POST"])
@@ -736,6 +740,50 @@ def change_password():
 
         return redirect(url_for("settings"))
     return render_template("change_password.html")
+
+@app.route("/delete-account", methods=["GET", "POST"])
+@login_required
+def delete_account():
+
+    if request.method == "POST":
+        password = request.form["password"]
+
+        #Making sure the user entered the correct password
+        if not check_password_hash(
+            current_user.password_hash,
+            password
+        ):
+            return render_template(
+                "delete_account.html",
+                error="The password you entered is incorrect."
+            )
+        
+        #Saving the user's ID before deleting the account
+        user_id = current_user.id 
+
+        #Deleting all tasks that belong to this user
+        Task.query.filter_by(
+            user_id=user_id
+        ).delete()
+
+        #Deleting the user's account
+        user = db.session.get(
+            User,
+            user_id
+        )
+
+        db.session.delete(user)
+        db.session.commit()
+
+        #Removing the login session
+        logout_user()
+
+        flash(
+            "Your UltiPlan 365 account has been permanently deleted."
+        )
+
+        return redirect(url_for("register"))
+    return render_template("delete_account.html")
 
 #Creating the database tables if they do not already exist
 with app.app_context():

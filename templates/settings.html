@@ -372,6 +372,20 @@
                 <a href="{{ url_for('logout') }}" class="settings-logout-button">Log Out</a>
             </div>
 
+            <div class="settings-logout-section">
+                <h2>Delete Account</h2>
+                <p>
+                    Permanently delete your UltiPlan 365 account and all of your saved tasks.
+                    This cannot be undone.
+                </p>
+                <a
+                    href="{{ url_for('delete_account') }}"
+                    class="settings-delete-account-button"
+                >
+                    Delete Account
+                </a>
+            </div>
+
             <footer class="manager-footer">
                 © 2026 UltiPlan 365. All rights reserved.
             </footer>

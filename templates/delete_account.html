@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        >
+        <title>Delete Account | UltiPlan 365</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/style.css') }}"
+        >
+    </head>
+    
+    <body>
+        <div class="delete-account-page">
+            <div class="delete-account-card">
+                <div class="delete-account-icon">
+                    ⚠
+                </div>
+                <h1>Delete Your Account</h1>
+                <p class="delete-account-warning">
+                    This will permanently delete your UltiPlan 365 account
+                    and all of your saved tasks. This action cannot be undone.
+                </p>
+
+                {% if error %}
+                    <div class="delete-account-error">
+                        {{ error }}
+                    </div>
+                {% endif %}
+
+                <form
+                    method="POST"
+                    action="{{ url_for('delete_account') }}"
+                >
+                    <div class="delete-account-field">
+                        <label for="password">Enter your password to confirm</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                        >
+                    </div>
+
+                    <div class="delete-account-actions">
+                        <a
+                            href="{{ url_for('settings') }}"
+                            class="delete-account-cancel"
+                        >
+                            Cancel
+                        </a>
+                        <button
+                            type="submit"
+                            class="delete-account-confirm"
+                        >
+                            Delete My Account
+                        </button>
+                    </div>
+
+                </form>
+
+                <p class="delete-account-note">
+                    Once your account is deleted, you will not be able to recover your account or your saved tasks.</p>
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
