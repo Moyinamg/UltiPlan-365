@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Account | UltiPlan 365</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+<body class="auth-page">
+
+    <main class="auth-wrapper">
+
+        <section class="auth-card">
+
+            <div class="auth-brand">
+
+                <div class="auth-logo">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div>
+                    <h1>UltiPlan 365</h1>
+                    <p>Your Study Partner</p>
+                </div>
+
+            </div>
+
+            <div class="auth-heading">
+
+                <h2>Create Your Account</h2>
+
+                <p>
+                    Start organizing your tasks and building
+                    a study plan that works for you.
+                </p>
+
+            </div>
+
+            {% if error %}
+
+                <div class="auth-error">
+                    {{ error }}
+                </div>
+
+            {% endif %}
+
+            <form
+                method="POST"
+                class="auth-form"
+            >
+
+                <div class="auth-form-group">
+
+                    <label for="name">
+                        Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your name"
+                        required
+                    >
+
+                </div>
+
+                <div class="auth-form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </div>
+
+                <div class="auth-form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="auth-primary-button"
+                >
+                    Create Account
+                </button>
+
+            </form>
+
+            <div class="auth-switch">
+
+                <p>
+                    Already have an account?
+                    <a href="{{ url_for('login') }}">
+                        Log in
+                    </a>
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

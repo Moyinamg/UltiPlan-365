@@ -121,13 +121,18 @@
             <header class="manager-topbar">
 
                 <div>
-                    <h2>Good morning! 👋</h2>
+                    <h3>
+                        <span id="time-greeting">Hello 👋</span>,
+                        {{ current_user.name.split()[0] }}
+                    </h3>
                     <p>Manage your tasks and stay on track.</p>
                 </div>
 
-                <div class="manager-profile">
-                    👤
-                </div>
+                <a href="{{ url_for('settings') }}" class="profile-link">
+                    <div class="profile-preview">
+                        👤
+                    </div>
+                </a>
 
             </header>
 
@@ -307,7 +312,7 @@
                                                     method="POST"
                                                     action="{{ url_for(
                                                         'complete_task',
-                                                        task_index=loop.index0
+                                                        task_id=task.id
                                                     ) }}"
                                                 >
 
@@ -325,7 +330,7 @@
                                                     method="POST"
                                                     action="{{ url_for(
                                                         'delete_tasks',
-                                                        task_index=loop.index0
+                                                        task_id=task.id
                                                     ) }}"
                                                 >
 
@@ -440,7 +445,7 @@
                                                     method="POST"
                                                     action="{{ url_for(
                                                         'restore_completed_task',
-                                                        task_index=loop.index0
+                                                        task_id=task.id
                                                     ) }}"
                                                 >
 
@@ -458,7 +463,7 @@
                                                     method="POST"
                                                     action="{{ url_for(
                                                         'delete_completed_task',
-                                                        task_index=loop.index0
+                                                        task_id=task.id
                                                     ) }}"
                                                 >
                                                     <button
@@ -577,6 +582,7 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 

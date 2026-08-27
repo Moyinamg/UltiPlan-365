@@ -121,13 +121,18 @@
             <header class="settings-topbar">
 
                 <div>
-                    <h2>Good morning! 👋</h2>
+                    <h3>
+                        <span id="time-greeting">Hello 👋</span>,
+                        {{ current_user.name.split()[0] }}
+                    </h3>
                     <p>Choose the settings that work best for you.</p>
                 </div>
 
-                <div class="manager-profile">
-                    👤
-                </div>
+                <a href="{{ url_for('settings') }}" class="profile-link">
+                    <div class="profile-preview">
+                        👤
+                    </div>
+                </a>
 
             </header>
 
@@ -341,6 +346,32 @@
 
             </div>
 
+            <div class="settings-logout-section">
+                <h2>Profile</h2>
+                <p>{{ current_user.name }}</p>
+                <p>{{ current_user.email}}</p>
+                <a
+                    href="{{ url_for('edit_profile') }}"
+                    class="settings-edit-profile-button"
+                >
+                    Edit Profile
+                </a>
+
+                <a
+                    href="{{ url_for('change_password') }}"
+                    class="settings-edit-profile-button"
+                >
+                    Change Password
+                </a>
+            </div>
+
+            <div class="settings-logout-section">
+                <h2>Account</h2>
+                <p>Log out of your UltiPlan 365 account.</p>
+
+                <a href="{{ url_for('logout') }}" class="settings-logout-button">Log Out</a>
+            </div>
+
             <footer class="manager-footer">
                 © 2026 UltiPlan 365. All rights reserved.
             </footer>
@@ -351,6 +382,7 @@
 
     <!-- Apply saved settings -->
     <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 

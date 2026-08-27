@@ -119,13 +119,18 @@
             <header class="focus-topbar">
 
                 <div>
-                    <h2>Good morning! 👋</h2>
+                    <h3>
+                        <span id="time-greeting">Hello 👋</span>,
+                        {{ current_user.name.split()[0] }}
+                    </h3>
                     <p>Let’s focus on what matters most today.</p>
                 </div>
 
-                <div class="focus-profile">
-                    👤
-                </div>
+                <a href="{{ url_for('settings') }}" class="profile-link">
+                    <div class="profile-preview">
+                        👤
+                    </div>
+                </a>
 
             </header>
 

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        >
+        <title>Login | UltiPlan 365</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/style.css') }}"
+        >
+    </head>
+
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+    <body class="auth-page">
+        <main class="auth-wrapper">
+            <section class="auth-card">
+                <div class="auth-brand">
+                    <div class="auth-logo">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div>
+                        <h1>UltiPlan 365</h1>
+                        <p>Your Study Partner</p>
+                    </div>
+                </div>
+                <div class="auth-heading">
+                    <h2>Welcome Back</h2>
+                    <p>Log in to continue planning, prioritizing, and staying focused.</p>
+                </div>
+
+                {% if error %}
+                    <div class="auth-error">{{ error }}</div>
+                {% endif %}
+
+                <form method="POST" class="auth-form">
+                    <div class="auth-form-group">
+                        <label for="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+
+                    <div class="auth-form-group">
+                        <label for="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                        >
+                    </div>
+
+                    <div class="forgot-password-link">
+                        <a href="{{ url_for('forgot_password') }}">
+                            Forgot Password?
+                        </a>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="auth-primary-button"
+                    >Log In</button>
+                </form>
+
+                <div class="auth-switch">
+                    <p>
+                        Don't have an account?
+                        <a href="{{ url_for('register') }}">Create one</a>
+                    </p>
+                </div>
+                
+            </section>
+        </main>
+    </body>
+</html>

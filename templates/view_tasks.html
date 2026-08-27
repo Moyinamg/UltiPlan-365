@@ -102,7 +102,10 @@
                 <!--Simple top greeting-->
                 <header class="view-tasks-topbar">
                     <div>
-                        <h2>Good morning! 👋</h2>
+                        <h3>
+                            <span id="time-greeting">Hello 👋</span>,
+                            {{ current_user.name.split()[0] }}
+                        </h3>
                         <p>Stay focused and keep going!</p>
                     </div>
                     <!--These icons are only visual for now-->
@@ -118,7 +121,11 @@
                             title="Not available yet"
                         >♧</button>
 
-                        <div class="view-profile-circle">👤</div>
+                        <a href="{{ url_for('settings') }}" class="profile-link">
+                            <div class="profile-preview">
+                                👤
+                            </div>
+                        </a>
                     </div>
                 </header>
 
@@ -378,6 +385,7 @@
         </script>
 
         <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
     </body>
 </html>

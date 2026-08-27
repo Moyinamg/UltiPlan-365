@@ -1,5 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    // Changing the greeting based on the user's local device time
+    const timeGreeting = document.getElementById("time-greeting");
+
+    if (timeGreeting) {
+        const currentHour = new Date().getHours();
+
+        if (currentHour < 12) {
+            timeGreeting.textContent = "Good Morning 👋";
+        } else if (currentHour < 17) {
+            timeGreeting.textContent = "Good Afternoon 👋";
+        } else {
+            timeGreeting.textContent = "Good Evening 👋";
+        }
+    }
+
     // View Tasks search
     const taskSearch = document.getElementById("task-search");
 
@@ -788,4 +803,5 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     displayCurrentTask();
+
 });

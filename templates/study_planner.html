@@ -126,7 +126,10 @@
             <header class="study-topbar">
 
                 <div>
-                    <h2>Good morning! 👋</h2>
+                    <h3>
+                        <span id="time-greeting">Hello 👋</span>,
+                        {{ current_user.name.split()[0] }}
+                    </h3>
                     <p>Plan smart, study better.</p>
                 </div>
 
@@ -149,9 +152,11 @@
                         ♧
                     </button>
 
-                    <div class="study-profile-circle">
-                        👤
-                    </div>
+                    <a href="{{ url_for('settings') }}" class="profile-link">
+                        <div class="profile-preview">
+                            👤
+                        </div>
+                    </a>
 
                 </div>
 
@@ -449,6 +454,7 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 

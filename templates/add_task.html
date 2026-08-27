@@ -155,7 +155,10 @@
             <header class="blueprint-topbar">
 
                 <div>
-                    <h2>Good morning! 👋</h2>
+                    <h3>
+                        <span id="time-greeting">Hello 👋</span>,
+                        {{ current_user.name.split()[0] }}
+                    </h3>
                     <p>Let’s plan something amazing.</p>
                 </div>
 
@@ -180,9 +183,11 @@
                         ♧
                     </button>
 
-                    <div class="profile-preview">
-                        👤
-                    </div>
+                    <a href="{{ url_for('settings') }}" class="profile-link">
+                        <div class="profile-preview">
+                            👤
+                        </div>
+                    </a>
 
                 </div>
 
