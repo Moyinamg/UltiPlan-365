@@ -805,3 +805,20 @@ document.addEventListener("DOMContentLoaded", function () {
     displayCurrentTask();
 
 });
+
+const mobileMenuButton = document.getElementById("mobile-menu-button");
+const mobileNav = document.getElementById("mobile-nav");
+
+if (mobileMenuButton && mobileNav) {
+    mobileMenuButton.addEventListener("click", function () {
+        mobileNav.classList.toggle("open");
+
+        if (mobileNav.classList.contains("open")) {
+            mobileMenuButton.textContent = "X";
+            mobileMenuButton.setAttribute("aria-label", "Close navigation menu");
+        } else {
+            mobileMenuButton.textContent = "☰";
+            mobileMenuButton.setAttribute("aria-label", "Open navigation menu");
+        }
+    });
+}

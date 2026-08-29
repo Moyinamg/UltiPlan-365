@@ -708,3 +708,6 @@ Version 1.0
 2026
 
 © 2026 AMG. UltiPlan 365. All rights reserved.
+
+
+#Making the app work on Mobile device as well if possible.

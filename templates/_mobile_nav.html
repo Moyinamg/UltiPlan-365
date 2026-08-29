@@ -1,0 +1,88 @@
+<!-- Mobile navigation header -->
+<header class="mobile-header">
+
+    <div class="mobile-brand">
+        <div class="mobile-logo-symbol">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div>
+            <strong>UltiPlan 365</strong>
+            <small>Your Study Partner</small>
+        </div>
+    </div>
+
+    <button
+        class="mobile-menu-button"
+        id="mobile-menu-button"
+        type="button"
+        aria-label="Open navigation menu"
+    >
+        ☰
+    </button>
+
+</header>
+
+
+<!-- Mobile navigation menu -->
+<nav class="mobile-nav" id="mobile-nav">
+
+    <a 
+        href="{{ url_for('home') }}"
+        class="{% if request.endpoint == 'home' %}mobile-nav-active{% endif %}"
+    >
+        Dashboard
+    </a>
+
+    <a 
+        href="{{ url_for('add_task') }}"
+        class="{% if request.endpoint == 'add_task' %}mobile-nav-active{% endif %}"
+    >
+        <span>＋</span>
+        Add Task
+    </a>
+
+    <a 
+        href="{{ url_for('view_tasks') }}"
+        class="{% if request.endpoint == 'view_tasks' %}mobile-nav-active{% endif %}"
+    >
+        <span>☷</span>
+        View Tasks
+    </a>
+
+    <a 
+        href="{{ url_for('study_planner') }}"
+        class="{% if request.endpoint == 'study_planner' %}mobile-nav-active{% endif %}"
+    >
+        <span>▣</span>
+        Study Planner
+    </a>
+
+    <a 
+        href="{{ url_for('focus_first') }}"
+        class="{% if request.endpoint == 'focus_first' %}mobile-nav-active{% endif %}"
+    >
+        <span>◎</span>
+        Focus First
+    </a>
+
+    <a 
+        href="{{ url_for('task_manager') }}"
+        class="{% if request.endpoint == 'task_manager' %}mobile-nav-active{% endif %}"
+    >
+        <span>✓</span>
+        Task Manager
+    </a>
+
+    <a 
+        href="{{ url_for('settings') }}"
+        class="{% if request.endpoint == 'settings' %}mobile-nav-active{% endif %}"
+    >
+        <span>⚙</span>
+        Settings
+    </a>
+
+</nav>
